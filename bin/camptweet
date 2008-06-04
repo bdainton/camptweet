@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+#require File.dirname(__FILE__) << "/../lib/fiveruns/tuneup/version"
+
+destination = ARGV[0] || Dir.pwd
+unless File.directory?(destination)
+  abort "CampTweet: #{destination} does not exist; cannot create CampTweet daemon script"
+end
+
+if File.exists?(File.join(destination, 'camptweetd'))
+  abort "CampTweet: CampTweet daemon script already exists in #{destination}.  Exiting."
+end
+
+origin = File.join(File.dirname(__FILE__), "camptweetd")
+FileUtils.mkdir_p File.dirname(destination)
+FileUtils.cp origin, destination
+
+STDERR.puts "CampTweet daemon script created."
