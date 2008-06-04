@@ -6,7 +6,4 @@ lib/camptweet/bot.rb
 lib/camptweet.rb
 LICENSE
 README.rdoc
-test/loader_test.rb
-test/test_helper.rb
-test/update_test.rb
 Manifest
