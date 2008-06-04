@@ -40,8 +40,6 @@ module Camptweet
         log "No room '#{campfire_room}' found.  Exiting."
         exit
       end
-      
-      exit
     end
   
     def run
