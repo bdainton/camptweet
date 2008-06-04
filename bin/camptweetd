@@ -5,8 +5,9 @@ require 'camptweet'
 Camptweet::Bot.new do |camptweet|
   camptweet.twitter_users = ['bdainton']
   camptweet.campfire_subdomain = 'mycompany'
-  camptweet.campfire_room = 'Room Name'
-  camptweet.campfire_user = 'foo@mycompany.com'
+  camptweet.campfire_use_ssl = true  
+  camptweet.campfire_room = 'Room Name'  
+  camptweet.campfire_email = 'foo@mycompany.com'
   camptweet.campfire_password = 'foo_password'
   camptweet.verbose = false
 end.run

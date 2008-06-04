@@ -3,8 +3,9 @@ module Camptweet
     
     attr_accessor :twitter_users
     attr_accessor :campfire_subdomain
+    attr_accessor :campfire_use_ssl    
     attr_accessor :campfire_room
-    attr_accessor :campfire_user
+    attr_accessor :campfire_email
     attr_accessor :campfire_password
     attr_accessor :verbose
     attr_reader   :twitter, :room
@@ -12,13 +13,35 @@ module Camptweet
     def initialize(&block)
       yield self if block_given?
       @twitter = Twitter::Client.new
-      log "Established connection to Twitter." if @twitter
-      campfire = Tinder::Campfire.new campfire_subdomain
-      log "Established connection to Campfire (#{campfire_subdomain})." if @campfire
-      campfire.login(campfire_user, campfire_password)
+      unless @twitter
+        log "Unable to establish connection to Twitter.  Exiting."
+        exit
+      end  
+      log "Established connection to Twitter."
+      
+      campfire = Tinder::Campfire.new(campfire_subdomain, :ssl => campfire_use_ssl)
+      unless campfire
+        log "Unable to establish connection to Campfire (#{campfire_subdomain}).  Exiting."
+        exit
+      end
+      log "Established connection to Campfire (#{campfire_subdomain})."
+      
+      unless campfire.login(campfire_email, campfire_password)
+        log "Unable to log in to Campfire (#{campfire_subdomain}).  Exiting."
+        exit
+      end
       log "Logged in to Campfire (#{campfire_subdomain})."
-      @room = campfire.rooms.select {|room| room.name == campfire_room}.first
-      log "Entered Campfire room '#{room.name}'."      
+      log "Available rooms: #{campfire.rooms.map(&:name).inspect}", :debug
+
+      @room = campfire.find_room_by_name campfire_room
+      if @room
+        log "Entered Campfire room '#{room.name}'."
+      else
+        log "No room '#{campfire_room}' found.  Exiting."
+        exit
+      end
+      
+      exit
     end
   
     def run
