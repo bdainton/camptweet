@@ -1,12 +1,16 @@
 # -*- ruby -*-
-#$LOAD_PATH << "lib"
-#$LOAD_PATH << "plugins/taxonomy/lib"
 
 require 'rubygems'
 require 'rake/testtask'
 require 'echoe'
 
-Echoe.new('camptweet')
+Echoe.new('camptweet') do |p|
+  p.author = "Brian Dainton"
+  p.summary = "A simple daemon that polls for updated Twitter statuses and posts them to a Campfire room."
+  p.url = "http://github.com/bdainton/camptweet"
+  p.dependencies = ["twitter4r >=0.3.0", "tinder >=0.1.6"]
+end
+
 
 task :default => :test
 

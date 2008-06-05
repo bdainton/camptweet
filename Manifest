@@ -1,5 +1,5 @@
 bin/camptweet
-bin/camptweetd
+bin/camptweetd_base
 CHANGELOG
 init.rb
 lib/camptweet/bot.rb

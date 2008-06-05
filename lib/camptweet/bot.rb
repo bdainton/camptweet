@@ -8,6 +8,7 @@ module Camptweet
     attr_accessor :campfire_email
     attr_accessor :campfire_password
     attr_accessor :verbose
+    attr_accessor :logfile
     attr_reader   :twitter, :room
   
     def initialize(&block)
@@ -109,7 +110,9 @@ module Camptweet
   
     def log(msg, level=:info)
       if level == :info || (level == :debug && verbose?)
-        puts "#{Time.now.strftime('%Y.%m.%d %H:%M:%S')} #{msg}"
+        File.open(logfile || 'camptweet.log', 'wb') do |f|
+          f.puts "#{Time.now.strftime('%Y.%m.%d %H:%M:%S')} #{msg}"
+        end
       end
     end
   end
