@@ -6,8 +6,10 @@ A simple daemon that polls for updated Twitter statuses and posts them to a Camp
 
 == Installation
 
-Install the gem:
+Install the gem and its dependencies:
 
+  sudo gem install twitter4r
+  sudo gem install tinder
   sudo gem install bdainton-camptweet -s http://gems.github.com/
   
 From the commandline, run:
