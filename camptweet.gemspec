@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Dainton"]
-  s.date = %q{2008-06-03}
+  s.date = %q{2008-06-04}
   s.description = %q{A simple daemon that polls for updated Twitter statuses and posts them to a Campfire room.}
   s.email = %q{}
   s.executables = ["camptweet", "camptweetd_base"]
