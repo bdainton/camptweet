@@ -8,7 +8,7 @@ A simple daemon that polls for updated Twitter statuses and posts them to a Camp
 
 Install the gem:
 
-  sudo gem install camptweet
+  sudo gem install camptweet --source=http://gems.github.com
   
 From the commandline, run:
 
@@ -18,12 +18,11 @@ This creates a 'camptweetd' file.
 
 Edit this file to specify the Twitter user screen names for which you'd like to grab status information, the desired Campfire subdomain and room name, and the Campfire email/password with which this daemon should use to connect.
 
-Then, just run:
+Then, run:
 
-  ruby camptweetd
+  ./camptweetd
 
-The latest Twitter statuses for the users you have specified will be broadcast into your Campfire room.
-  
+The latest Twitter statuses for the users you have specified will be broadcast into your Campfire room.  Nohup and background this script excecution to keep it going (nohup ./camptweetd &).
 
 == License
 
