@@ -27,9 +27,11 @@ module Camptweet
         begin
           new_statuses = []
           checking_twitter_timelines do |user, status|
-            next if status.text == last_statuses[user]
-            new_statuses << status
-            last_statuses[user] = status.text
+            # only consider the most recent status
+            if last_statuses[user].nil? || status.created_at > last_statuses[user].created_at
+              new_statuses << status
+              last_statuses[user] = status
+            end
           end
                 
           new_statuses.sort_by(&:created_at).each do |status|
@@ -104,7 +106,7 @@ module Camptweet
     def initial_statuses
       returning statuses = {} do
         checking_twitter_timelines do |user, status|
-          statuses[user] = status.text
+          statuses[user] = status
         end
       end
     end
