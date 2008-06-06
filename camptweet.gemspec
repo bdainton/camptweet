@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'camptweet'
-  s.version = '0.8.0'
+  s.version = '0.8.1'
   s.authors = ['Brian Dainton']
   s.email = 'brian.dainton@gmail.com'
   s.homepage = 'http://github.com/bdainton/camptweet'

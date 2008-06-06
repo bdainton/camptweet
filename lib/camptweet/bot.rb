@@ -9,10 +9,11 @@ module Camptweet
     attr_accessor :campfire_password
     attr_accessor :verbose
     attr_accessor :logfile
-    attr_reader   :twitter, :campfire, :room
+    attr_reader   :twitter, :campfire, :room, :log
   
     def initialize(&block)
       yield self if block_given?
+      init_log      
       connect_to_twitter
       connect_to_campfire
       login_to_campfire
@@ -34,65 +35,70 @@ module Camptweet
           new_statuses.sort_by(&:created_at).each do |status|
             begin
               message = "[#{status.user.name}] #{status.text}"
-              log message
+              log.info message
               room.speak message
-              log "(Campfire updated)", :debug
+              log.debug "(Campfire updated)"
             rescue Timeout::Error => e
-              log "Campfire timeout: (#{e.message})"
+              log.info "Campfire timeout: (#{e.message})"
             ensure
               sleep 2
             end
           end
         rescue => e
-          log e.message
-          log e.backtrace
+          log.error e.message
+          log.error e.backtrace
         end
-        log "Sleeping (10s)", :debug
+        log.debug "Sleeping (10s)"
         sleep 10
       end
     end
     
-    def verbose?
-      verbose
-    end
-
     private
     
     def connect_to_twitter
       @twitter = Twitter::Client.new
       unless twitter
-        log "Unable to establish connection to Twitter.  Exiting."
+        log.info "Unable to establish connection to Twitter.  Exiting."
         exit
       end  
-      log "Established connection to Twitter."
+      log.info "Established connection to Twitter."
     end
     
     def connect_to_campfire
       @campfire = Tinder::Campfire.new(campfire_subdomain, :ssl => campfire_use_ssl)
       unless campfire
-        log "Unable to establish connection to Campfire (#{campfire_subdomain}).  Exiting."
+        log.info "Unable to establish connection to Campfire (#{campfire_subdomain}).  Exiting."
         exit
       end
-      log "Established connection to Campfire (#{campfire_subdomain})."
+      log.info "Established connection to Campfire (#{campfire_subdomain})."
     end
     
     def login_to_campfire
       unless campfire.login(campfire_email, campfire_password)
-        log "Unable to log in to Campfire (#{campfire_subdomain}).  Exiting."
+        log.info "Unable to log in to Campfire (#{campfire_subdomain}).  Exiting."
         exit
       end
-      log "Logged in to Campfire (#{campfire_subdomain})."
-      log "Available rooms: #{campfire.rooms.map(&:name).inspect}", :debug
+      log.info "Logged in to Campfire (#{campfire_subdomain})."
+      log.debug "Available rooms: #{campfire.rooms.map(&:name).inspect}"
     end
     
     def connect_to_campfire_room
       @room = campfire.find_room_by_name(campfire_room)
       if room
-        log "Entered Campfire room '#{room.name}'."
+        log.info "Entered Campfire room '#{room.name}'."
       else
-        log "No room '#{campfire_room}' found.  Exiting."
+        log.info "No room '#{campfire_room}' found.  Exiting."
         exit
       end      
+    end
+    
+    def init_log
+      @log = Logger.new(logfile || 'camptweet.log')
+      log.level = verbose? ? Logger::DEBUG : Logger::INFO
+    end
+    
+    def verbose?
+      verbose
     end
     
     def initial_statuses
@@ -106,27 +112,28 @@ module Camptweet
     def checking_twitter_timelines
       twitter_users.each do |user|
         begin
-          log "Checking '#{user}' timeline...", :debug
+          log.debug "Checking '#{user}' timeline..."
           twitter.timeline_for(:user, :id => user, :count => 1) do |status|
             yield user, status
           end
         rescue Timeout::Error => e
-          log "Twitter timeout: (#{e.message})"
+          log.error "Twitter timeout: (#{e.message})"
         rescue Twitter::RESTError => e
-          log "Twitter REST Error: (#{e.message})"
+          log.error "Twitter REST Error: (#{e.message})"
+        rescue => e
+          log.error "Twitter error: (#{e.message})"
         ensure
-          log "   ...done.", :debug
+          log.debug "   ...done."
           sleep 2
         end
       end
     end
-  
-    def log(msg, level=:info)
-      if level == :info || (level == :debug && verbose?)
-        File.open(logfile || 'camptweet.log', 'a') do |f|
-          f.puts "#{Time.now.strftime('%Y.%m.%d %H:%M:%S')} #{msg}"
-        end
-      end
-    end
+    # def log(msg, level=:info)
+    #       if level == :info || (level == :debug && verbose?)
+    #         File.open(logfile || 'camptweet.log', 'a') do |f|
+    #           f.puts "#{Time.now.strftime('%Y.%m.%d %H:%M:%S')} #{msg}"
+    #         end
+    #       end
+    #     end
   end
 end
