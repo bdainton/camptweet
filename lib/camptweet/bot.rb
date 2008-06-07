@@ -27,13 +27,17 @@ module Camptweet
         begin
           new_statuses = []
           checking_twitter_timelines do |user, status|
-            # only consider the most recent status
-            if last_statuses[user].nil? || status.created_at > last_statuses[user].created_at
+            if last_statuses[user].nil?
+              # Only broadcast this tweet if we have an initial status against
+              # which we can compare it.
+              last_statuses[user] = status
+            elsif status.created_at > last_statuses[user].created_at
+              # Only consider the most recent tweet.
               new_statuses << status
               last_statuses[user] = status
             end
           end
-                
+              
           new_statuses.sort_by(&:created_at).each do |status|
             begin
               message = "[#{status.user.name}] #{status.text}"
@@ -130,12 +134,6 @@ module Camptweet
         end
       end
     end
-    # def log(msg, level=:info)
-    #       if level == :info || (level == :debug && verbose?)
-    #         File.open(logfile || 'camptweet.log', 'a') do |f|
-    #           f.puts "#{Time.now.strftime('%Y.%m.%d %H:%M:%S')} #{msg}"
-    #         end
-    #       end
-    #     end
+
   end
 end
