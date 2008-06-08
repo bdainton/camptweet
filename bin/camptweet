@@ -12,7 +12,7 @@ if File.exists?(File.join(destination, 'camptweetd'))
 end
 
 origin = File.join(File.dirname(__FILE__), "camptweetd_base")
-FileUtils.mkdir_p File.dirname(destination)
+FileUtils.mkdir_p destination
 FileUtils.cp origin, File.join(destination, 'camptweetd')
 
-STDERR.puts "CampTweet daemon script created at #{destination}."
+STDERR.puts "CampTweet daemon script created at #{File.join(destination, 'camptweetd')}."
