@@ -53,6 +53,8 @@ module Camptweet
         rescue => e
           log.error e.message
           log.error e.backtrace
+          # re-establish potentially lost connection to Twitter
+          connect_to_twitter
         end
         log.debug "Sleeping (10s)"
         sleep 10
@@ -128,6 +130,7 @@ module Camptweet
           log.error "Twitter REST Error: (#{e.message})"
         rescue => e
           log.error "Twitter error: (#{e.message})"
+          connect_to_twitter
         ensure
           log.debug "   ...done."
           sleep 2

@@ -1,3 +1,5 @@
+v0.8.2. Attempt automatic Twitter reconnects. 
+
 v0.8.1. Use standard logger.  Bot class restructured.  Better error handling.  Better Campfire spam protection.
 
 v0.8. First Version
