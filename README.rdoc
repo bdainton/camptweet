@@ -12,9 +12,9 @@ Install the gem and its dependencies:
   
 From the commandline, run:
 
-  camptweet
+  camptweet .
 
-This creates a 'camptweetd' file.  
+This creates a 'camptweetd' file in the current directory.  
 
 Edit this file to specify the Twitter user screen names for which you'd like to grab status information, the desired Campfire subdomain and room name, and the Campfire email/password with which this daemon should use to connect.
 
