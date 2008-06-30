@@ -4,8 +4,10 @@ require 'camptweet'
 
 Camptweet::Bot.new do |camptweet|
   camptweet.twitter_users = ['bdainton']
+  camptweet.twitter_search_terms = ['fiveruns']
+  camptweet.feed_urls = ['http://github.com/repositories.atom']
   camptweet.campfire_subdomain = 'mycompany'
-  camptweet.campfire_use_ssl = true  
+  camptweet.campfire_use_ssl = true
   camptweet.campfire_room = 'Room Name'  
   camptweet.campfire_email = 'foo@mycompany.com'
   camptweet.campfire_password = 'foo_password'

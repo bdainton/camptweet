@@ -1,3 +1,5 @@
+v0.8.3. Added support for broadcasting Twitter (Summize) search results and other RSS feed results to Campfire. 
+
 v0.8.2. Attempt automatic Twitter reconnects. 
 
 v0.8.1. Use standard logger.  Bot class restructured.  Better error handling.  Better Campfire spam protection.
