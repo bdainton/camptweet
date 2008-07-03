@@ -189,7 +189,7 @@ module Camptweet
     def send_message_to_campfire(message)
       begin
         log.info message
-        room.speak message
+        room.speak CGI.unescapeHTML(message)
         log.debug "(Campfire updated)"
       rescue Timeout::Error => e
         log.info "Campfire timeout: (#{e.message})"

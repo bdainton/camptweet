@@ -7,7 +7,7 @@ require 'echoe'
 Echoe.new('camptweet') do |p|
   p.author = "Brian Dainton"
   p.summary = "A simple daemon that polls for updated Twitter statuses, 
-    Twitter search results, and RSS/Atom feed content and posts 
+    Summize search results, and RSS/Atom feed items and posts 
     them to a Campfire room."
   p.url = "http://github.com/bdainton/camptweet"
   p.dependencies = ["twitter4r >=0.3.0", "tinder >=0.1.6", "simple-rss"]
